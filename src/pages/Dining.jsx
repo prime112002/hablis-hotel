@@ -1,8 +1,11 @@
+"use client";
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { useInView } from "react-intersection-observer";
 
 const diningOptions = [
   {
@@ -29,6 +32,11 @@ const diningOptions = [
 ];
 
 const Dining = () => {
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+    triggerOnce: true,
+  });
+
   const scrollToSection = (id) => {
     const element = document.getElementById(id);
     if (element) {
@@ -39,7 +47,17 @@ const Dining = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="bg-white shadow-md sticky top-0 z-10 py-4">
+
+      {/* Hero Section */}
+      <div className="w-full bg-gray-100 py-8">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-serif text-hotel-primary text-center"></h1>
+          <p className="text-center text-gray-600 mt-2"></p>
+        </div>
+      </div>
+
+      {/* Navigation Section */}
+      <div className="bg-white shadow-md py-4 sticky top-0 z-10">
         <div className="container mx-auto px-4 flex justify-center space-x-8">
           {diningOptions.map((option) => (
             <button
@@ -54,20 +72,27 @@ const Dining = () => {
       </div>
 
       <main className="flex-grow">
-        <section className="py-16">
+        <section ref={ref} className="py-16">
           <div className="container mx-auto px-4">
             {diningOptions.map((option, index) => (
               <div
                 key={option.id}
                 id={option.id}
-                className="flex flex-col md:flex-row items-center gap-8 mb-16"
+                className={`flex flex-col md:flex-row items-center gap-8 mb-16 transform transition-all duration-700 ${
+                  inView
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-10 opacity-0"
+                }`}
+                style={{ transitionDelay: `${index * 150}ms` }}
               >
-                <div className="md:w-1/2">
-                  <img
-                    src={option.image}
-                    alt={option.name}
-                    className="w-full h-96 object-cover rounded-lg"
-                  />
+                <div className="md:w-1/2 order-2">
+                  <div className="relative overflow-hidden rounded-lg">
+                    <img
+                      src={option.image || "/placeholder.svg"}
+                      alt={option.name}
+                      className="w-full h-96 object-cover transform hover:scale-105 transition-transform duration-700"
+                    />
+                  </div>
                 </div>
                 <div className="md:w-1/2">
                   <h2 className="text-2xl font-serif text-hotel-primary mb-4">

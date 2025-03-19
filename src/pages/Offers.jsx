@@ -26,7 +26,17 @@ const Offers = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="bg-white shadow-md sticky top-0 z-10 py-4">
+
+      {/* Hero Section */}
+      <div className="w-full bg-gray-100 py-8">
+        <div className="container mx-auto px-4">
+          <h1 className="text-3xl font-serif text-hotel-primary text-center"></h1>
+          <p className="text-center text-gray-600 mt-2"></p>
+        </div>
+      </div>
+
+      {/* Offer Navigation */}
+      <div className="bg-white shadow-md py-4 sticky top-0 z-10">
         <div className="container mx-auto px-4 flex justify-center space-x-8">
           {offers.map((item) => (
             <button
@@ -42,23 +52,33 @@ const Offers = () => {
 
       <main className="flex-grow py-16">
         <div className="container mx-auto px-4">
-          {offers.map((item) => (
+          {offers.map((item, index) => (
             <div
               key={item.id}
               id={item.id}
-              className="mb-16 p-8 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition"
-              onClick={() => scrollToSection(item.id)}
+              className={`flex flex-col md:flex-row items-center gap-8 mb-16 transform transition-all duration-700`}
+              style={{ transitionDelay: `${index * 150}ms` }}
             >
-              <h2 className="text-2xl font-serif text-hotel-primary mb-4">
-                {item.name}
-              </h2>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                {item.description}
-              </p>
+              <div className="md:w-1/2 order-2">
+                <div className="relative overflow-hidden rounded-lg bg-gray-300 h-48 flex items-center justify-center">
+                  <span className="text-xl text-white font-semibold">
+                    Offer Image
+                  </span>
+                </div>
+              </div>
+              <div className="md:w-1/2">
+                <h2 className="text-2xl font-serif text-hotel-primary mb-4">
+                  {item.name}
+                </h2>
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  {item.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
       </main>
+
       <Footer />
     </div>
   );
